@@ -1,19 +1,16 @@
 import React from "react";
 
-class NoteButton extends React.Component {
-  constructor(props) {
-    super(props);
+function NoteButton({ id, isArchived, onDelete, onArchive }) {
+  return (
+    <div className="note-item__action">
+        {isArchived 
+        ? <button className="note-item__archive-button" onClick={() => onArchive(id)}>Unarchive</button> 
+        : <button className="note-item__archive-button" onClick={() => onArchive(id)}>Archive</button> 
+        }
 
-  }
-
-  render() {
-    return (
-      <div className="note-item__action">
-        <button className="note-item__archive-button">Archive</button>
-        <button className="note-item__delete-button">Delete</button>
-      </div>
-    )
-  }
+      <button className="note-item__delete-button" onClick={() => onDelete(id)}>Delete</button>
+    </div>
+  )
 }
 
 export default NoteButton;
