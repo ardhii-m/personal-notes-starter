@@ -1,8 +1,9 @@
 import React from "react";
 import NoteItem from "./NoteItem";
 import { showFormattedDate } from "../utils/index";
+import PropTypes from "prop-types";
 
-function NotesList({ notes, onDelete, onArchive }) {
+function NotesList({ notes }) {
   return (
     <section className="notes-list">
       {notes.length > 0 ? (
@@ -10,8 +11,6 @@ function NotesList({ notes, onDelete, onArchive }) {
           <NoteItem 
           key={note.id}
           id={note.id}
-          onArchive={onArchive}
-          onDelete={onDelete}
           createdAt={showFormattedDate(note.createdAt)}
           {...note} 
           />
@@ -22,6 +21,10 @@ function NotesList({ notes, onDelete, onArchive }) {
       }
     </section>
   );
+}
+
+NotesList.propTypes = {
+  notes: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default NotesList;

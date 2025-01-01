@@ -2,6 +2,7 @@ import React from "react";
 import NotesList from "../components/NotesList";
 import { archiveNote, deleteNote, getActiveNotes } from "../utils/local-data";
 import autoBindReact from "auto-bind/react";
+import HomePageButton from "../components/HomePageButton";
 
 class HomePage extends React.Component {
    constructor(props) {
@@ -43,6 +44,7 @@ class HomePage extends React.Component {
           onDelete={this.onDeleteHandler} 
           onArchive={this.onArchiveHandler}
         />
+        <HomePageButton />
       </section>
     )
    }

@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import AddPage from './pages/AddPage';
 import ArchivePage from './pages/ArchivePage';
 import DetailPage from "./pages/DetailPage";
+import PageNotFound from "./pages/PageNotFound";
 
 function NotesApp() {
 
@@ -21,6 +22,7 @@ function NotesApp() {
           <Route path="/add" element={<AddPage />} />
           <Route path="/archives" element={<ArchivePage />} />
           <Route path="/notes/:id" element={<DetailPage />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>
 

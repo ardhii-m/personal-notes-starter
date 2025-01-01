@@ -1,30 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import autoBindReact from "auto-bind/react";
+import ConfirmButton from "./ConfirmButton";
 
 class NoteInput extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     autoBindReact(this);
     this.state = {
-      title: '',
-      body: '',
-    }
+      title: "",
+      body: "",
+    };
   }
 
   titleHandler(event) {
     this.setState(() => {
       return {
         title: event.target.value,
-      }
-    })
+      };
+    });
   }
 
   bodyHandler(event) {
     this.setState(() => {
       return {
-        body: event.target.value,
-      }
+        body: event.target.innerHTML,
+      };
     });
   }
 
@@ -36,28 +37,27 @@ class NoteInput extends React.Component {
   render() {
     return (
       <form className="add-new-page__input" onSubmit={this.submitHandler}>
-        <input 
-        className="add-new-page__input__title"
-        type="text" 
-        placeholder="Insert Title Here..." 
-        value={this.state.title} 
-        onChange={this.titleHandler} 
-        required
+        <div
+          className="add-new-page__input__title"
+          contentEditable
+          data-placeholder="Insert Title Here..."
+          onInput={this.titleHandler}
         />
 
-        <input 
-        className="add-new-page__input__body" 
-        type="text" 
-        placeholder="Insert Note Here..." 
-        value={this.state.body} 
-        onChange={this.bodyHandler} 
-        required 
+        <div
+          className="add-new-page__input__body"
+          contentEditable
+          data-placeholder="Insert Note Here..."
+          onInput={this.bodyHandler}
         />
-
-        <button type="submit">Add Note</button>
+        <ConfirmButton />
       </form>
-    )
+    );
   }
 }
+
+NoteInput.propTypes = {
+  addNote: PropTypes.func.isRequired,
+};
 
 export default NoteInput;
