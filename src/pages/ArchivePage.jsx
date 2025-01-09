@@ -1,50 +1,52 @@
 import React from "react";
-import { deleteNote, unarchiveNote, getArchivedNotes } from "../utils/local-data";
-import NotesList from "../components/NotesList";
+import { getArchivedNotes } from "../utils/network-data";
+import NotesList from "../components/note/NotesList";
 import autoBindReact from "auto-bind/react";
+import { useSearchParams } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
+import PropTypes from "prop-types";
+import LocaleContext from "../contexts/localeContext";
 
-class ArchivePage extends React.Component {
-  constructor(props) {
-    super(props);
-    autoBindReact(this);
+function ArchivePage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [notes, setNotes] = React.useState([]);
+  const [keyword, setKeyword] = React.useState(() => {
+    return searchParams.get('keyword') || ''
+  });
+  const { locale } = React.useContext(LocaleContext);
 
-    this.state = {
-      notes: getArchivedNotes(),
-    }
-  }
-
-  onDeleteHandler(id) {
-    deleteNote(id);
-
-    this.setState(() => {
-      return {
-        notes: getArchivedNotes(),
-      }
+  React.useEffect(() => {
+    getArchivedNotes().then(({ data }) => {
+      setNotes(data);
     });
-   }
+  }, []);
 
-  onUnarchiveHandler(id) {
-    unarchiveNote(id);
-
-    this.setState(() => {
-      return {
-        notes: getArchivedNotes(),
-      }
-    });
+  function onKeywordChangeHandler(keyword) {
+    setKeyword(keyword);
+    setSearchParams({ keyword });
   }
 
-  render() {
-    return (
-      <section>
-        <h2>Arsip Catatan</h2>
-        <NotesList 
-          notes={this.state.notes} 
-          onDelete={this.onDeleteHandler} 
-          onArchive={this.onUnarchiveHandler}
-        />
-      </section>
-    )
-  }
+  const filteredNotes = notes.filter((note) => {
+    return note.title.toLowerCase().includes(
+      keyword.toLowerCase()
+    );
+  });
+
+  return (
+    <section>
+      <h2>{locale === 'id' ? 'Arsip Catatan' : 'Archived Notes'}</h2>
+      <SearchBar
+        keyword={keyword}
+        keywordChange={onKeywordChangeHandler}
+      />
+      <NotesList notes={filteredNotes} />
+    </section>
+  );
+}
+
+ArchivePage.propTypes = {
+  defaultKeyword: PropTypes.string,
+  keywordChange: PropTypes.func.isRequired,
 }
 
 export default ArchivePage;

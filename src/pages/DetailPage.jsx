@@ -1,54 +1,58 @@
 import React from "react";
-import { getNote } from "../utils/local-data";
-import NoteDetail from "../components/NoteDetail";
-import { useParams } from "react-router-dom";
+import NoteDetail from "../components/note/NoteDetail";
+import { useNavigate, useParams } from "react-router-dom";
 import PageNotFound from "./PageNotFound";
-import { deleteNote, archiveNote, unarchiveNote } from "../utils/local-data";
+import {
+  getNote,
+  deleteNote,
+  archiveNote,
+  unarchiveNote,
+} from "../utils/network-data";
 import autoBindReact from "auto-bind/react";
+import PropTypes from "prop-types";
 
 function DetailPageWrapper() {
   const { id } = useParams();
-  return <DetailPage id={id} />;
+  const navigate = useNavigate();
+  return <DetailPage id={id} navigate={navigate} />;
 }
 
 class DetailPage extends React.Component {
   constructor(props) {
     super(props);
     autoBindReact(this);
-    
+
     this.state = {
-      note: getNote(props.id),
+      note: null,
     };
   }
 
-  onDeleteHandler(id) {
-    deleteNote(id);
+  async componentDidMount() {
+    const { data } = await getNote(this.props.id);
 
     this.setState(() => {
       return {
-        notes: getArchivedNotes(),
+        note: data
       }
-    });
-   }
-
-  onArchiveHandler(id) {
-    archiveNote(id);
-
-    this.setState(() => {
-      return {
-        notes: getActiveNotes(),
-      };
-    });
+    })
+  }
+  
+  async onDeleteHandler(id) {
+    const { navigate } = this.props;
+    await deleteNote(id);
+    navigate("/");
   }
 
-  onUnarchiveHandler(id) {
-    unarchiveNote(id);
+  async onArchiveHandler(id) {
+    const { navigate } = this.props;
+    await archiveNote(id);
+    navigate("/");
+  }
 
-    this.setState(() => {
-      return {
-        notes: getArchivedNotes(),
-      };
-    });
+  async onUnarchiveHandler(id) {
+    const { navigate } = this.props;
+    await unarchiveNote(id);
+    navigate("/archives");
   }
 
   render() {
@@ -57,12 +61,20 @@ class DetailPage extends React.Component {
     }
     return (
       <section>
-        <NoteDetail {...this.state.note} 
-                  onDelete={this.onDeleteHandler} 
-                  onArchive={this.onArchiveHandler}/>
+        <NoteDetail
+          {...this.state.note}
+          onDelete={this.onDeleteHandler}
+          onArchive={this.onArchiveHandler}
+          onUnarchive={this.onUnarchiveHandler}
+        />
       </section>
     );
   }
+}
+
+DetailPage.propTypes = {
+  id: PropTypes.string.isRequired,
+  navigate: PropTypes.func.isRequired, 
 }
 
 export default DetailPageWrapper;
