@@ -2,32 +2,30 @@ import React from "react";
 import PropTypes from "prop-types";
 import ConfirmButton from "./ConfirmButton";
 import LocaleContext from "../../contexts/localeContext";
+import useInput from "../../hooks/useInput";
 
 function NoteInput({ addNote }) {
-  const [title, setTitle] = React.useState('');
-  const [body, setBody] = React.useState('');
+  const [title, titleHandler] = useInput("");
+  const [body, setBody] = React.useState("");
   const { locale } = React.useContext(LocaleContext);
-
-  const titleHandler = (event) => {
-    setTitle(event.target.value);
-  }
 
   const bodyHandler = (event) => {
     setBody(event.target.innerText);
-  }
+  };
 
   const submitHandler = (event) => {
     event.preventDefault();
     addNote({ title, body });
-    setTitle('');
-    setBody('');
+    setBody("");
   };
 
   return (
     <form className="add-new-page__input" onSubmit={submitHandler}>
       <input
         className="add-new-page__input__title"
-        placeholder={locale === 'id' ? 'Tambahkan Judul Disini...' : 'Insert Title Here...' }
+        placeholder={
+          locale === "id" ? "Tambahkan Judul Disini..." : "Insert Title Here..."
+        }
         value={title}
         onChange={titleHandler}
       />
@@ -35,7 +33,11 @@ function NoteInput({ addNote }) {
       <div
         className="add-new-page__input__body"
         contentEditable="true"
-        data-placeholder={locale === 'id' ? 'Tambahkan Catatan Disini...' : 'Insert Note Here...' }
+        data-placeholder={
+          locale === "id"
+            ? "Tambahkan Catatan Disini..."
+            : "Insert Note Here..."
+        }
         value={body}
         onInput={bodyHandler}
       />
@@ -76,25 +78,25 @@ function NoteInput({ addNote }) {
 //   }
 
 //   render() {
-    // return (
-    //   <form className="add-new-page__input" onSubmit={this.submitHandler}>
-    //     <input
-    //       className="add-new-page__input__title"
-    //       placeholder="Insert Title Here..."
-    //       value={this.state.title}
-    //       onChange={this.titleHandler}
-    //     />
+// return (
+//   <form className="add-new-page__input" onSubmit={this.submitHandler}>
+//     <input
+//       className="add-new-page__input__title"
+//       placeholder="Insert Title Here..."
+//       value={this.state.title}
+//       onChange={this.titleHandler}
+//     />
 
-    //     <div
-    //       className="add-new-page__input__body"
-    //       contentEditable="true"
-    //       data-placeholder="Insert Note Here..."
-    //       value={this.state.body}
-    //       onInput={this.bodyHandler}
-    //     />
-    //     <ConfirmButton />
-    //   </form>
-    // );
+//     <div
+//       className="add-new-page__input__body"
+//       contentEditable="true"
+//       data-placeholder="Insert Note Here..."
+//       value={this.state.body}
+//       onInput={this.bodyHandler}
+//     />
+//     <ConfirmButton />
+//   </form>
+// );
 //   }
 // }
 

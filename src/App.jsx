@@ -9,14 +9,18 @@ import PageNotFound from "./pages/PageNotFound";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import { getUserLogged, putAccessToken } from "./utils/network-data";
-import {LocaleProvider} from "./contexts/localeContext";
+import { LocaleProvider } from "./contexts/localeContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function NotesApp() {
   const [authedUser, setAuthedUser] = React.useState(null);
   const [initializing, setInitializing] = React.useState(true);
-  const [locale, setLocale] = React.useState('id');
-  const [theme, setTheme] = React.useState('dark')
+  const [locale, setLocale] = React.useState(() => {
+    return localStorage.getItem('locale') || 'id';
+  });
+  const [theme, setTheme] = React.useState(() => {
+    return localStorage.getItem('theme') || 'dark';
+  });
 
   React.useEffect(() => {
     async function fetchUserData() {
@@ -28,29 +32,33 @@ function NotesApp() {
     fetchUserData();
   }, []);
 
-  const toggleTheme =() => {
+  const toggleTheme = () => {
     setTheme((prevTheme) => {
-      return prevTheme === 'dark' ? 'light' : 'dark';
-    })
-  }
+      const newTheme = prevTheme === "dark" ? "light" : "dark";
+      localStorage.setItem('theme', newTheme);
+      return newTheme;
+    });
+  };
 
   const themeContextValue = React.useMemo(() => {
     return {
       theme,
-      setTheme
+      toggleTheme,
     };
   }, [theme]);
 
   const toggleLocale = () => {
     setLocale((prevLocale) => {
-      return prevLocale === 'id' ? 'en' : 'id';
+      const newLocale = prevLocale === "id" ? "en" : "id";
+      localStorage.setItem('locale', newLocale);
+      return newLocale;
     });
   };
 
   const localeContextValue = React.useMemo(() => {
     return {
       locale,
-      toggleLocale
+      toggleLocale,
     };
   }, [locale]);
 
@@ -71,11 +79,17 @@ function NotesApp() {
 
   if (authedUser === null) {
     return (
-      <ThemeProvider>
+      <ThemeProvider value={themeContextValue}>
         <LocaleProvider value={localeContextValue}>
-          <div className="app-container" data-theme={theme === 'dark' ? 'dark' : 'light'}>
+          <div
+            className="app-container"
+            data-theme={theme === "dark" ? "dark" : "light"}
+          >
             <header>
-              <h1 className="note-app__header">{locale === 'id' ? 'Aplikasi Catatan' : 'Notes App'}</h1>
+              <h1 className="note-app__header">
+                {locale === "id" ? "Aplikasi Catatan" : "Notes App"}
+              </h1>
+              <Navigation />
             </header>
             <main>
               <Routes>
@@ -93,11 +107,16 @@ function NotesApp() {
   }
 
   return (
-    <ThemeProvider>
+    <ThemeProvider value={themeContextValue}>
       <LocaleProvider value={localeContextValue}>
-        <div className="app-container" data-theme={theme === 'dark' ? 'dark' : 'light'}>
+        <div
+          className="app-container"
+          data-theme={theme === "dark" ? "dark" : "light"}
+        >
           <header>
-            <h1 className="note-app__header">{locale === 'id' ? 'Aplikasi Catatan' : 'Notes App'}</h1>
+            <h1 className="note-app__header">
+              {locale === "id" ? "Aplikasi Catatan" : "Notes App"}
+            </h1>
             <Navigation logout={onLogout} name={authedUser.name} />
           </header>
           <main>
@@ -112,7 +131,6 @@ function NotesApp() {
         </div>
       </LocaleProvider>
     </ThemeProvider>
-
   );
 }
 

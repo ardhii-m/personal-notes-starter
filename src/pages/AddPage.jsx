@@ -15,7 +15,7 @@ function AddPage() {
 
   return (
     <section>
-      <h2>{locale === 'id' ? 'Tambah Catatan Baru' : 'Add New Note'}</h2>
+      <h2>{locale === "id" ? "Tambah Catatan Baru" : "Add New Note"}</h2>
       <NoteInput addNote={onAddNoteHandler} />
     </section>
   );

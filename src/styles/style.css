@@ -212,7 +212,7 @@ main {
   color: var(--on-background-grey);
 }
 
-.toggle-theme, .toggle-locale {
+.toggle-theme, .toggle-locale, .home-button, .archives-button {
   background-color: transparent;
   border: 0;
   cursor: pointer;
@@ -226,7 +226,7 @@ main {
   font-size: 32px;
 }
 
-.toggle-locale {
+.toggle-locale, .home-button, .archives-button {
   font-size: 28px;
 }
 
@@ -275,6 +275,13 @@ main {
   font-size: 28px;
   cursor: pointer;
   color: var(--on-background);
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.5em;
+  padding: 2em;
+  color: #555;
 }
 
 @media screen and (min-width: 650px) {

@@ -19,7 +19,9 @@ function NotesList({ notes }) {
           />
         ))
       ) : (
-        <p className="notes-list__empty-message">{locale === 'id' ? 'Tidak ada catatan' : 'Notes is empty'}</p>
+        <p className="notes-list__empty-message">
+          {locale === "id" ? "Tidak ada catatan" : "Notes is empty"}
+        </p>
       )}
     </section>
   );

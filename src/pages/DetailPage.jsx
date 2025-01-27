@@ -32,11 +32,11 @@ class DetailPage extends React.Component {
 
     this.setState(() => {
       return {
-        note: data
-      }
-    })
+        note: data,
+      };
+    });
   }
-  
+
   async onDeleteHandler(id) {
     const { navigate } = this.props;
     await deleteNote(id);
@@ -74,7 +74,7 @@ class DetailPage extends React.Component {
 
 DetailPage.propTypes = {
   id: PropTypes.string.isRequired,
-  navigate: PropTypes.func.isRequired, 
-}
+  navigate: PropTypes.func.isRequired,
+};
 
 export default DetailPageWrapper;
